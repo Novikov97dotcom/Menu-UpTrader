@@ -1,0 +1,60 @@
+{% load static %}
+
+<ul class="menu">
+    {% for item in menu_items %}
+        <li class="menu-item {% if item == active_item %}active{% endif %} {% if item in active_ancestors %}expanded{% endif %}">
+            <a href="{{ item.get_url }}" {% if item == active_item %}class="active"{% endif %}>
+                {{ item.name }}
+            </a>
+            {% if item.children.exists and item == active_item or item in active_ancestors %}
+                <ul class="submenu">
+                    {% for child in item.children.all %}
+                        <li class="menu-item {% if child == active_item %}active{% endif %}">
+                            <a href="{{ child.get_url }}" {% if child == active_item %}class="active"{% endif %}>
+                                {{ child.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+<style>
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item {
+    margin: 5px 0;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+    display: block;
+}
+
+.menu-item.active > a {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.menu-item.expanded > .submenu {
+    display: block;
+}
+
+.menu-item:not(.expanded) > .submenu {
+    display: none;
+}
+</style> 
